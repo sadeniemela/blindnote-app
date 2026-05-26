@@ -1,6 +1,9 @@
 
 import Link from "next/dist/client/link"
+// lucide for all icons
+import { User, UserCircle, CircleUser, Home } from "lucide-react"
 import ThemeToggle from "./themetoggle"
+
 
 export default function Header() {
   return (
@@ -8,7 +11,11 @@ export default function Header() {
     <div className=" w-full flex items-center justify-between">
 
       <Link href="/" className="text-4xl font-bold m-4">
-      <h1 className="text-3xl font-bold text-green-500">Blind<span className="text-black dark:text-white">Note</span></h1>
+      <Home size={32} className="text-blue-900 dark:text-blue-500" />
+      </Link>
+
+      <Link href="/login" className="text-lg font-semibold text-blue-900 dark:text-blue-500 hover:underline">
+        <UserCircle size={32} />
       </Link>
 
       <ThemeToggle />
