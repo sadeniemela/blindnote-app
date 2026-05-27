@@ -48,10 +48,6 @@ export default function LoginForm() {
         </button>
       </form>
 
-      <Link href="/register" className="text-neutral-500 hover:underline mt-7">
-        Don't have an account? Sign up
-      </Link>
-
       {/* Mention about privacy policy and terms of service */}
       
       </div>

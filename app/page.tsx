@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import Header from "./common/header";
 import LandingPage from "./common/parts/landingpage";
 
