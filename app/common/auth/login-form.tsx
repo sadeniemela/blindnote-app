@@ -5,7 +5,7 @@ export default function LoginForm() {
     <div className="flex h-screen items-center justify-center">
 
       <form
-        action={async (e) => {
+        action={async () => {
           await signIn("google")
         }}
         className="rounded px-4 py-2 "

@@ -1,6 +1,5 @@
 
 import { signIn } from "@/auth"
-import Link from "next/link"
 import Header from "../common/header"
 
 // This is the login page where users can sign in with Google or email (magic link)

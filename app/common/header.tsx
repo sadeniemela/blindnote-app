@@ -1,7 +1,7 @@
 
-import Link from "next/dist/client/link"
+import Link from "next/link"
 // lucide for all icons
-import { User, UserCircle, CircleUser, Home } from "lucide-react"
+import { UserCircle, Home } from "lucide-react"
 import ThemeToggle from "./themetoggle"
 
 
