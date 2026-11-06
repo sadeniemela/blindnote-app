@@ -33,3 +33,20 @@ export async function deleteForm(id: string) {
     where: { id }
   })
 }
+
+// Function to get only the public fields of a form. Used on the public feedback page,
+// so that responses and the owner's id never leak to anonymous visitors.
+export async function getPublicForm(id: string) {
+  return prisma.form.findUnique({
+    where: { id },
+    select: { id: true, title: true, description: true }
+  })
+}
+
+// Function to save an anonymous response. No user id is stored, which keeps it anonymous.
+export async function createResponse(formId: string, content: string) {
+  return prisma.response.create({
+    data: { formId, content },
+    select: { id: true, createdAt: true }
+  })
+}
