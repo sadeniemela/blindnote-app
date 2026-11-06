@@ -1,5 +1,4 @@
 import NextAuth from "next-auth"
-import Google from "next-auth/providers/google"
 import Resend from "next-auth/providers/resend"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 // Use the shared Prisma client so the app keeps only one database connection pool
@@ -9,11 +8,6 @@ import { prisma } from "@/lib/db"
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
-    // Google provider for OAuth authentication
-    Google({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    }),
     // Resend provider for email authentication (magic link)
     Resend({
       apiKey: process.env.AUTH_RESEND_KEY,
