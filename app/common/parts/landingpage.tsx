@@ -1,6 +1,5 @@
 "use client"
 import Link from "next/link"
-import Image from "next/image"
 import { ChartColumn } from "lucide-react"
 
 export default function LandingPage() {

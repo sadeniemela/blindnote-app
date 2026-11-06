@@ -1,16 +1,16 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
+import { useSyncExternalStore } from "react"
 import { Sun, Moon } from "lucide-react"
+
+const emptySubscribe = () => () => {}
 
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  // Server can't know the client's stored theme, so we render nothing until
+  // mounted on the client. useSyncExternalStore avoids setState-in-effect.
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false)
 
   if (!mounted) return null
 

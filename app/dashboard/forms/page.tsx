@@ -3,7 +3,8 @@ import { auth } from "@/auth"
 import { getForms } from "@/lib/forms"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { MessageSquare, Plus, Trash2 } from "lucide-react"
+import { MessageSquare, Plus } from "lucide-react"
+import DeleteFormButton from "./delete-form-button"
 
 export default async function FormsPage() {
   const session = await auth()
@@ -65,9 +66,7 @@ export default async function FormsPage() {
                   >
                     Avaa linkki
                   </Link>
-                  <button className="text-zinc-400 hover:text-red-500 transition-colors">
-                    <Trash2 size={16} />
-                  </button>
+                  <DeleteFormButton formId={form.id} />
                 </div>
               </div>
             ))}
