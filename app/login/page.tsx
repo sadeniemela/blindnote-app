@@ -1,8 +1,8 @@
 
-import { signIn } from "@/auth"
+import { requestCode } from "./actions"
 import Header from "../common/header"
 
-// This is the login page where users can sign in with email (magic link)
+// This is the login page where users can sign in with a one time code sent by email
 export default function LoginForm() {
   return (
     <div className="bg-white dark:bg-black flex flex-col h-screen items-center justify-center">
@@ -13,12 +13,8 @@ export default function LoginForm() {
       
       <h1 className="text-3xl text-black dark:text-white font-bold mb-15">Welcome back!</h1>
 
-      {/* Sign in with email form (magic link) */}
-      <form action={async (formData: globalThis.FormData) => {
-        "use server"
-        const email = formData.get("email") as string
-        await signIn("resend", { email, redirectTo: "/dashboard" })
-        }}
+      {/* Sign in with email: we send a 6 digit code */}
+      <form action={requestCode}
         className="flex-col flex w-full items-center"
     >
         <input 
@@ -30,7 +26,7 @@ export default function LoginForm() {
          />
 
         <button type="submit" className="rounded-xl w-2/3 mt-4 px-4 py-2 bg-gray-200 dark:bg-neutral-800 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600">
-          Sign in with email
+          Send login code
         </button>
       </form>
 
