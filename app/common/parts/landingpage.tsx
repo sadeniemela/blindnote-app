@@ -15,7 +15,7 @@ export default function LandingPage() {
       <h1 className="text-blue-900 text-8xl font-bold z-20">Blind<span className="text-blue-700">Note</span></h1>
         
 
-        <Link href="/feedback" className="bg-blue-700 hover:bg-blue-700 m-10 text-blue-100 text-xl font-bold py-3 px-6 rounded-xl z-20">
+        <Link href="/dashboard/forms" className="bg-blue-700 hover:bg-blue-700 m-10 text-blue-100 text-xl font-bold py-3 px-6 rounded-xl z-20">
           Get Started
         </Link>
     </div>

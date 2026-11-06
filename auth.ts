@@ -2,10 +2,8 @@ import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import Resend from "next-auth/providers/resend"
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import { PrismaClient } from "@prisma/client"
-
-// Initialize Prisma Client
-const prisma = new PrismaClient()
+// Use the shared Prisma client so the app keeps only one database connection pool
+import { prisma } from "@/lib/db"
 
 // Configure NextAuth with providers and Prisma adapter
 export const { handlers, auth, signIn, signOut } = NextAuth({
