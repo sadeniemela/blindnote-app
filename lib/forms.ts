@@ -23,7 +23,7 @@ export async function createForm(userId: string, title: string, description?: st
 export async function getForm(id: string) {
   return prisma.form.findUnique({
     where: { id },
-    include: { responses: true }
+    include: { responses: { orderBy: { createdAt: "desc" } } }
   })
 }
 

@@ -1,42 +1,45 @@
 
 import { requestCode } from "./actions"
 import Header from "../common/header"
+import { Label, Page, Title, fieldLabelClass, inputClass, primaryButtonClass } from "../common/ui"
 
-// This is the login page where users can sign in with a one time code sent by email
-export default function LoginForm() {
+// Login step 1: the user types their email and we send a 6 digit code
+export default function LoginPage() {
   return (
-    <div className="bg-white dark:bg-black flex flex-col h-screen items-center justify-center">
-      
+    <Page className="flex flex-col">
       <Header />
 
-      <div className= "bg-neutral-100 dark:bg-neutral-900 text-black dark:text-white w-3/4 flex flex-col items-center justify-center text-center h-100 rounded-xl p-3">
-      
-      <h1 className="text-3xl text-black dark:text-white font-bold mb-15">Welcome back!</h1>
+      <div className="flex-1 flex flex-col justify-center max-w-2xl w-full pt-28 pb-12">
+        <Label>Login</Label>
+        <Title className="mt-6 mb-12">Welcome<br />back.</Title>
 
-      {/* Sign in with email: we send a 6 digit code */}
-      <form action={requestCode}
-        className="flex-col flex w-full items-center"
-    >
-        <input 
-         type="email"
-         placeholder="Enter your email"
-         name="email"
-         required
-         className="w-2/3 p-3 bg-neutral-500/30 rounded-xl text-black dark:text-white hover:border-2 border-blue-700"
-         />
+        <form action={requestCode} className="flex flex-col gap-10">
+          <label className="flex flex-col gap-2">
+            <span className={fieldLabelClass}>Email</span>
+            <input
+              type="email"
+              name="email"
+              required
+              autoComplete="email"
+              placeholder="you@example.com"
+              className={inputClass}
+            />
+          </label>
 
-        <button type="submit" className="rounded-xl w-2/3 mt-4 px-4 py-2 bg-gray-200 dark:bg-neutral-800 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600">
-          Send login code
-        </button>
-      </form>
-
-      {/* Mention about privacy policy and terms of service */}
-      
+          <div className="flex flex-col sm:flex-row sm:items-center gap-6">
+            <button type="submit" className={primaryButtonClass}>
+              Send login code
+            </button>
+            <p className="text-sm text-neutral-500 max-w-xs">
+              We email you a 6 digit code. No password needed.
+            </p>
+          </div>
+        </form>
       </div>
-      <div className="text-sm mt-10 p-4 text-neutral-500">With signing in you will approve the privacy policy and terms of service </div>
-      </div>
 
-
-    
+      <p className="pb-6 text-xs uppercase tracking-widest text-neutral-500">
+        By signing in you accept the privacy policy and terms of service
+      </p>
+    </Page>
   )
 }

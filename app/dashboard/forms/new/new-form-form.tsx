@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { fieldLabelClass, inputClass, primaryButtonClass } from "../../../common/ui"
 
 // Client Component: needs state (loading, error) and runs in the browser.
 // It talks to our own REST API with fetch, the same way any other client would.
@@ -39,13 +40,10 @@ export default function NewFormForm() {
     router.refresh()
   }
 
-  const inputClass =
-    "w-full p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-white focus:outline-none focus:border-blue-700"
-
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-      <label className="flex flex-col gap-2 text-sm font-medium text-zinc-900 dark:text-white">
-        Otsikko
+    <form onSubmit={handleSubmit} className="flex flex-col gap-12">
+      <label className="flex flex-col gap-2">
+        <span className={fieldLabelClass}>Kysymys</span>
         <input
           name="title"
           required
@@ -55,25 +53,21 @@ export default function NewFormForm() {
         />
       </label>
 
-      <label className="flex flex-col gap-2 text-sm font-medium text-zinc-900 dark:text-white">
-        Kuvaus (valinnainen)
+      <label className="flex flex-col gap-2">
+        <span className={fieldLabelClass}>Kuvaus (valinnainen)</span>
         <textarea
           name="description"
-          rows={3}
+          rows={2}
           maxLength={500}
           placeholder="Kerro vastaajalle lyhyesti mistä on kyse"
-          className={inputClass}
+          className={inputClass + " !text-xl resize-none"}
         />
       </label>
 
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="bg-blue-700 text-white font-medium py-3 rounded-xl hover:opacity-90 disabled:opacity-50 transition-opacity"
-      >
-        {loading ? "Luodaan..." : "Luo lomake"}
+      <button type="submit" disabled={loading} className={primaryButtonClass + " self-start"}>
+        {loading ? "Luodaan" : "Luo lomake"}
       </button>
     </form>
   )

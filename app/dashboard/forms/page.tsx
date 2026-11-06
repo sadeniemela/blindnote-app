@@ -1,78 +1,71 @@
 
 import { auth } from "@/auth"
 import { getForms } from "@/lib/forms"
-import { redirect } from "next/navigation"
 import Link from "next/link"
-import { MessageSquare, Plus } from "lucide-react"
 import DeleteFormButton from "./delete-form-button"
+import CopyLink from "../../common/copy-link"
+import { Label, Title, primaryButtonClass, textLinkClass } from "../../common/ui"
 
 export default async function FormsPage() {
+  // The layout already checked the login, so the session exists here
   const session = await auth()
-
-  if (!session?.user?.id) {
-    redirect("/login")
-  }
-
-  const forms = await getForms(session.user.id)
+  const forms = await getForms(session!.user!.id!)
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black">
-      <div className="max-w-4xl mx-auto p-8">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">
-            Lomakkeet
-          </h1>
-          <Link
-            href="/dashboard/forms/new"
-            className="flex items-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-4 py-2 rounded-xl text-sm font-medium hover:opacity-80 transition-opacity"
-          >
-            <Plus size={16} />
-            Uusi lomake
-          </Link>
+    <>
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-8 mb-12">
+        <div>
+          <Label>{forms.length} {forms.length === 1 ? "lomake" : "lomaketta"}</Label>
+          <Title className="mt-6">Lomakkeet</Title>
         </div>
+        <Link href="/dashboard/forms/new" className={primaryButtonClass + " self-start sm:self-auto"}>
+          Uusi lomake
+        </Link>
+      </div>
 
-        {forms.length === 0 ? (
-          <div className="text-center py-20 text-zinc-400">
-            <MessageSquare size={48} className="mx-auto mb-4 opacity-20" />
-            <p className="text-lg font-medium">Ei lomakkeita vielä</p>
-            <p className="text-sm mt-1">Luo ensimmäinen lomake ja jaa se muille</p>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-4">
-            {forms.map((form) => (
-              <div
-                key={form.id}
-                className="flex items-center justify-between p-5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors"
-              >
-                <div className="flex flex-col gap-1">
-                  <Link
-                    href={`/dashboard/forms/${form.id}`}
-                    className="font-medium text-zinc-900 dark:text-white hover:underline"
-                  >
-                    {form.title}
-                  </Link>
-                  {form.description && (
-                    <p className="text-sm text-zinc-500">{form.description}</p>
-                  )}
-                  <p className="text-xs text-zinc-400 mt-1">
-                    {form._count.responses} vastausta
-                  </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Link
-                    href={`/f/${form.id}`}
-                    target="_blank"
-                    className="text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
-                  >
-                    Avaa linkki
+      {forms.length === 0 ? (
+        <div className="border-t border-black dark:border-white py-24">
+          <p className="font-heading font-black uppercase text-3xl sm:text-5xl tracking-tight">Ei vielä lomakkeita.</p>
+          <p className="text-neutral-500 mt-4 max-w-md">
+            Luo ensimmäinen lomake, jaa linkki ja lue mitä ihmiset oikeasti ajattelevat.
+          </p>
+        </div>
+      ) : (
+        <ol className="border-t border-black dark:border-white">
+          {forms.map((form, i) => (
+            <li
+              key={form.id}
+              className="grid grid-cols-[2.5rem_1fr] sm:grid-cols-[5rem_1fr_auto] gap-x-4 gap-y-4 py-8 border-b border-black dark:border-white"
+            >
+              <span className="font-mono text-sm text-neutral-500 pt-1">{String(i + 1).padStart(2, "0")}</span>
+
+              <div className="min-w-0">
+                <Link
+                  href={`/dashboard/forms/${form.id}`}
+                  className="font-heading font-black uppercase text-2xl sm:text-4xl tracking-tight hover:opacity-60 transition-opacity break-words"
+                >
+                  {form.title}
+                </Link>
+                {form.description && <p className="text-neutral-500 mt-2 max-w-xl">{form.description}</p>}
+              </div>
+
+              <div className="col-start-2 sm:col-start-3 flex sm:flex-col sm:items-end justify-between gap-4">
+                <p className="font-heading font-black text-3xl sm:text-5xl leading-none">
+                  {form._count.responses}
+                  <span className="block text-xs font-sans font-medium uppercase tracking-widest text-neutral-500 mt-1">vastausta</span>
+                </p>
+                <div className="flex items-center gap-5">
+                  <CopyLink path={`/f/${form.id}`} />
+                  <Link href={`/f/${form.id}`} target="_blank" className={textLinkClass}>
+                    Avaa
                   </Link>
                   <DeleteFormButton formId={form.id} />
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
+            </li>
+          ))}
+        </ol>
+      )}
+    </>
   )
 }

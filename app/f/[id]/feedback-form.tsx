@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { fieldLabelClass, inputClass, primaryButtonClass } from "../../common/ui"
 
 const MAX_LENGTH = 2000
 
@@ -33,35 +34,38 @@ export default function FeedbackForm({ formId }: { formId: string }) {
 
   if (status === "sent") {
     return (
-      <div className="p-6 rounded-xl bg-blue-50 dark:bg-neutral-900 text-blue-900 dark:text-white">
-        <p className="font-bold">Kiitos palautteestasi!</p>
-        <p className="text-sm text-neutral-500 mt-1">Vastauksesi on lähetetty nimettömänä.</p>
+      <div className="border-t border-black dark:border-white pt-10">
+        <p className="font-heading font-black uppercase text-4xl sm:text-6xl tracking-tighter leading-[0.9]">Kiitos.</p>
+        <p className="text-lg text-neutral-500 mt-4">Vastauksesi on lähetetty nimettömänä.</p>
       </div>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-      <textarea
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        required
-        rows={6}
-        maxLength={MAX_LENGTH}
-        placeholder="Kirjoita palautteesi tähän"
-        className="w-full p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-black dark:text-white focus:outline-none focus:border-blue-700"
-      />
-      <div className="flex items-center justify-between">
-        <span className="text-xs text-neutral-400">{content.length} / {MAX_LENGTH}</span>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+      <label className="flex flex-col gap-2">
+        <span className={fieldLabelClass}>Vastauksesi</span>
+        <textarea
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          required
+          rows={5}
+          maxLength={MAX_LENGTH}
+          placeholder="Kirjoita rehellisesti, nimeäsi ei tallenneta"
+          className={inputClass + " !text-xl resize-none"}
+        />
+      </label>
+      <div className="flex items-center justify-between gap-6">
         <button
           type="submit"
           disabled={status === "sending" || !content.trim()}
-          className="bg-blue-700 text-white font-medium py-2 px-6 rounded-xl hover:opacity-90 disabled:opacity-50 transition-opacity"
+          className={primaryButtonClass}
         >
-          {status === "sending" ? "Lähetetään..." : "Lähetä"}
+          {status === "sending" ? "Lähetetään" : "Lähetä nimettömänä"}
         </button>
+        <span className="font-mono text-xs text-neutral-500">{content.length} / {MAX_LENGTH}</span>
       </div>
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
     </form>
   )
 }

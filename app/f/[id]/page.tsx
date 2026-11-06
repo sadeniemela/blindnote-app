@@ -1,7 +1,9 @@
 
 import { getPublicForm } from "@/lib/forms"
+import Link from "next/link"
 import { notFound } from "next/navigation"
 import FeedbackForm from "./feedback-form"
+import { Label, Page, Title } from "../../common/ui"
 
 // Public page that anyone with the link can open. No login is required.
 export default async function FeedbackPage({ params }: { params: Promise<{ id: string }> }) {
@@ -13,18 +15,26 @@ export default async function FeedbackPage({ params }: { params: Promise<{ id: s
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center p-4">
-      <div className="w-full max-w-xl">
-        <p className="text-sm text-neutral-500 mb-2">Nimetön palaute</p>
-        <h1 className="text-3xl font-bold text-blue-900 dark:text-white mb-2">{form.title}</h1>
-        {form.description && (
-          <p className="text-neutral-500 mb-6">{form.description}</p>
-        )}
-        <FeedbackForm formId={form.id} />
-        <p className="text-xs text-neutral-400 mt-6">
-          Vastauksesi tallennetaan ilman nimeä, sähköpostia tai tiliä.
-        </p>
+    <Page className="flex flex-col">
+      <header className="py-5 flex items-center justify-between text-xs font-medium uppercase tracking-widest">
+        <Link href="/" className="font-heading font-black text-base tracking-tight normal-case">
+          Blind<span className="bg-black text-white dark:bg-white dark:text-black px-1">note</span>
+        </Link>
+        <span className="text-neutral-500">( Nimetön palaute )</span>
+      </header>
+
+      <div className="flex-1 flex flex-col justify-center max-w-3xl w-full py-16">
+        <Label>Kysymys</Label>
+        <Title className="mt-6">{form.title}</Title>
+        {form.description && <p className="text-lg text-neutral-500 mt-6 max-w-xl">{form.description}</p>}
+        <div className="mt-14">
+          <FeedbackForm formId={form.id} />
+        </div>
       </div>
-    </div>
+
+      <p className="pb-6 text-xs uppercase tracking-widest text-neutral-500">
+        Vastauksesi tallennetaan ilman nimeä, sähköpostia tai tiliä.
+      </p>
+    </Page>
   )
 }
