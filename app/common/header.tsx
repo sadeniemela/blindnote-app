@@ -1,26 +1,25 @@
 
 import Link from "next/link"
-// lucide for all icons
-import { UserCircle, Home } from "lucide-react"
 import ThemeToggle from "./themetoggle"
 
-
+// Minimal top bar: small wordmark left, micro label in the middle, actions right
 export default function Header() {
   return (
-    <header className="w-full bg-neutral-100/10 absolute top-0 left-0 border-gray-200 dark:border-neutral-800 p-4">
-    <div className=" w-full flex items-center justify-between">
+    <header className="w-full absolute top-0 left-0 z-30 px-4 sm:px-8 py-5 text-black dark:text-white">
+      <div className="w-full flex items-center justify-between text-xs font-medium uppercase tracking-widest">
+        <Link href="/" className="font-heading font-black text-base tracking-tight normal-case">
+          Blind<span className="bg-black text-white dark:bg-white dark:text-black px-1">note</span>
+        </Link>
 
-      <Link href="/" className="text-4xl font-bold m-4">
-      <Home size={32} className="text-blue-900 dark:text-blue-500" />
-      </Link>
+        <span className="hidden sm:block text-neutral-500">( Anonymous feedback )</span>
 
-      <Link href="/login" className="text-lg font-semibold text-blue-900 dark:text-blue-500 hover:underline">
-        <UserCircle size={32} />
-      </Link>
-
-      <ThemeToggle />
-    </div>
+        <div className="flex items-center gap-6">
+          <Link href="/login" className="hover:opacity-60 transition-opacity">
+            Login
+          </Link>
+          <ThemeToggle />
+        </div>
+      </div>
     </header>
   )
 }
-

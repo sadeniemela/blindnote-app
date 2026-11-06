@@ -2,7 +2,6 @@
 
 import { useTheme } from "next-themes"
 import { useSyncExternalStore } from "react"
-import { Sun, Moon } from "lucide-react"
 
 const emptySubscribe = () => () => {}
 
@@ -12,14 +11,15 @@ export default function ThemeToggle() {
   // mounted on the client. useSyncExternalStore avoids setState-in-effect.
   const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false)
 
-  if (!mounted) return null
+  if (!mounted) return <span className="w-10" />
 
   return (
     <button
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className="rounded-full text-3xl m-4 text-blue-800 dark:text-blue-500"
+      className="w-10 text-left uppercase tracking-widest hover:opacity-60 transition-opacity"
+      aria-label="Toggle dark mode"
     >
-       {theme === "light" ? <Moon size={32} /> : <Sun size={32} />}
+      {theme === "light" ? "Dark" : "Light"}
     </button>
   )
 }
