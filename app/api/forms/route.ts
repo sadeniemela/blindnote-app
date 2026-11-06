@@ -22,12 +22,20 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const body = await request.json()
+    // Never trust the client: the body may be missing, not JSON, or contain wrong types
+    const body = await request.json().catch(() => null)
+    const title = typeof body?.title === "string" ? body.title.trim() : ""
+    const description = typeof body?.description === "string" ? body.description.trim() : ""
 
-    if (!body.title) {
+    if (!title) {
         return NextResponse.json({ error: "Title is required" }, { status: 400 })
     }
 
-    const form = await createForm(session.user.id, body.title, body.description)
-    return NextResponse.json(form)
+    if (title.length > 120 || description.length > 500) {
+        return NextResponse.json({ error: "Title max 120 and description max 500 characters" }, { status: 400 })
+    }
+
+    const form = await createForm(session.user.id, title, description || undefined)
+    // 201 Created is the correct status when a new resource was made
+    return NextResponse.json(form, { status: 201 })
 }
