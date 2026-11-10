@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Demo from "./demo"
 
 // Small uppercase label in parentheses, used to name each section
 function Label({ children }: { children: React.ReactNode }) {
@@ -59,6 +60,12 @@ export default function LandingPage() {
           </p>
           <div className="hidden sm:block" />
           <div className="flex sm:justify-end gap-3">
+            <a
+              href="#demo"
+              className="uppercase text-xs font-medium tracking-widest rounded-full px-6 py-4 bg-black text-white dark:bg-white dark:text-black hover:opacity-80 transition-opacity"
+            >
+              Try the demo
+            </a>
             <Link
               href="/dashboard/forms"
               className="uppercase text-xs font-medium tracking-widest border border-black dark:border-white rounded-full px-6 py-4 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
@@ -104,6 +111,9 @@ export default function LandingPage() {
           ))}
         </ol>
       </section>
+
+      {/* DEMO: try the real API without an account */}
+      <Demo />
 
       {/* FINAL CALL TO ACTION, inverted colors */}
       <section className="bg-black text-white dark:bg-white dark:text-black px-4 sm:px-8 py-32 flex flex-col items-start gap-10">

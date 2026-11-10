@@ -1,5 +1,6 @@
 
 import { createResponse, getPublicForm } from "@/lib/forms"
+import { DEMO_FORM_ID, ensureDemoForm } from "@/lib/demo"
 import { NextResponse } from "next/server"
 
 const MAX_LENGTH = 2000
@@ -8,6 +9,11 @@ const MAX_LENGTH = 2000
 // That is why we validate everything carefully and return only what the sender needs.
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
+
+    // The landing page demo uses a real form. Create it the first time someone tries the demo.
+    if (id === DEMO_FORM_ID) {
+        await ensureDemoForm()
+    }
 
     const form = await getPublicForm(id)
     if (!form) {
