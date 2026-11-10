@@ -15,9 +15,11 @@ export default async function VerifyPage({
   const { t: { login: t } } = await getDictionary()
   const email = (await cookies()).get("blindnote_login_email")?.value
   // Auth.js sends ?error=Verification for a wrong or expired code, other errors mean sending failed
-  const message = error ? (error === "Verification" ? t.wrongCode : t.sendFailed) : null
+  const message = error
+    ? error === "Verification" ? t.wrongCode : error === "TooMany" ? t.tooMany : t.sendFailed
+    : null
   // Show the code form only when a code was sent: no error yet, or the typed code was wrong
-  const showForm = email && (!error || error === "Verification")
+  const showForm = email && (!error || error === "Verification" || error === "TooMany")
 
   return (
     <Page className="flex flex-col">

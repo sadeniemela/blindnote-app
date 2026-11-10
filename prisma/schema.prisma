@@ -108,3 +108,10 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+// Counters for rate limiting. key is for example "verify:email@example.com" or
+// "answer:<hashed ip>:<formId>". Rows are reset when their time window has passed.
+model RateLimit {
+  key         String   @id
+  count       Int
+  windowStart DateTime
+}

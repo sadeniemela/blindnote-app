@@ -69,7 +69,7 @@ const en = {
     hoodLabel: "03 / Under the hood",
     yourAnswer: "your answer",
     waiting: "Waiting for your answer...",
-    hoodNote: "No login, no cookies, no IP stored. Any app can send feedback to a Blindnote form with one request.",
+    hoodNote: "No login and no cookies, and answers are never linked to an IP address. Any app can send feedback to a Blindnote form with one request.",
   },
   login: {
     label: "Login",
@@ -93,6 +93,7 @@ const en = {
     backToLogin: "Back to login",
     wrongCode: "The code is wrong or expired. Check the code or request a new one.",
     sendFailed: "We could not send the code. Please try again.",
+    tooMany: "Too many attempts. Wait 10 minutes and try again.",
   },
   forms: {
     count: (n: number) => (n === 1 ? "1 form" : `${n} forms`),
@@ -151,6 +152,7 @@ const en = {
     optional: "All questions are optional. Answer the ones you want.",
     stars: "stars",
     error: "Sending failed, please try again",
+    tooMany: "You have sent many answers already. Try again later.",
   },
 }
 
@@ -223,7 +225,7 @@ const fi: Dictionary = {
     hoodLabel: "03 / Konepellin alla",
     yourAnswer: "vastauksesi",
     waiting: "Odotetaan vastaustasi...",
-    hoodNote: "Ei kirjautumista, ei evästeitä, IP-osoitetta ei tallenneta. Mikä tahansa sovellus voi lähettää palautetta Blindnote-lomakkeeseen yhdellä pyynnöllä.",
+    hoodNote: "Ei kirjautumista eikä evästeitä, eikä vastauksia koskaan yhdistetä IP-osoitteeseen. Mikä tahansa sovellus voi lähettää palautetta Blindnote-lomakkeeseen yhdellä pyynnöllä.",
   },
   login: {
     label: "Kirjautuminen",
@@ -247,6 +249,7 @@ const fi: Dictionary = {
     backToLogin: "Takaisin kirjautumiseen",
     wrongCode: "Koodi on väärä tai vanhentunut. Tarkista koodi tai pyydä uusi.",
     sendFailed: "Koodin lähetys epäonnistui. Yritä uudelleen.",
+    tooMany: "Liian monta yritystä. Odota 10 minuuttia ja yritä uudelleen.",
   },
   forms: {
     count: (n: number) => (n === 1 ? "1 lomake" : `${n} lomaketta`),
@@ -305,6 +308,7 @@ const fi: Dictionary = {
     optional: "Kaikki kysymykset ovat vapaaehtoisia. Vastaa niihin, joihin haluat.",
     stars: "tähteä",
     error: "Lähetys epäonnistui, yritä uudelleen",
+    tooMany: "Olet jo lähettänyt monta vastausta. Yritä myöhemmin uudelleen.",
   },
 }
 

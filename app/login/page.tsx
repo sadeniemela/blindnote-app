@@ -5,7 +5,8 @@ import { Label, Page, Title, fieldLabelClass, inputClass, primaryButtonClass } f
 import { getDictionary } from "@/lib/i18n"
 
 // Login step 1: the user types their email and we send a 6 digit code
-export default async function LoginPage() {
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
+  const { error } = await searchParams
   const { t: { login: t } } = await getDictionary()
 
   return (
@@ -28,6 +29,8 @@ export default async function LoginPage() {
               className={inputClass}
             />
           </label>
+
+          {error === "TooMany" && <p className="text-sm text-red-600 dark:text-red-400">{t.tooMany}</p>}
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-6">
             <button type="submit" className={primaryButtonClass}>

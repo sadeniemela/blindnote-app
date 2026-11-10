@@ -65,7 +65,8 @@ export default function FeedbackForm({ formId, questions, t }: { formId: string;
 
     if (!res.ok) {
       const data = await res.json().catch(() => ({}))
-      setError(data.error ?? t.error)
+      // 429 = too many requests. Show our own translated text for it.
+      setError(res.status === 429 ? t.tooMany : data.error ?? t.error)
       setStatus("idle")
       return
     }

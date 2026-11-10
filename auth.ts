@@ -4,6 +4,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 import { randomInt } from "node:crypto"
 // Use the shared Prisma client so the app keeps only one database connection pool
 import { prisma } from "@/lib/db"
+import { rateLimit } from "@/lib/rate-limit"
 
 const CODE_MAX_AGE_SECONDS = 10 * 60
 
@@ -32,6 +33,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       generateVerificationToken: () => randomInt(0, 1_000_000).toString().padStart(6, "0"),
       // Send the code instead of a link. Auth.js stores only a hash of the code in the database.
       sendVerificationRequest: async ({ identifier, token, provider }) => {
+        // Safety net: the login page already limits code requests, but someone could call
+        // the Auth.js sign in endpoint directly. Never send more than 5 codes in 10 minutes.
+        const { ok } = await rateLimit(`send-any:${identifier}`, { limit: 5, windowSeconds: 10 * 60 })
+        if (!ok) throw new Error("Too many login codes requested")
+
         const res = await fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: {

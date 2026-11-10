@@ -2,6 +2,7 @@
 import { createResponse, getPublicForm } from "@/lib/forms"
 import { DEMO_FORM_ID, ensureDemoForm } from "@/lib/demo"
 import { LIMITS, parseAnswers } from "@/lib/questions"
+import { RULES, hashedIp, rateLimit } from "@/lib/rate-limit"
 import { NextResponse } from "next/server"
 
 // Public API route: anyone with the link can send anonymous feedback, no login needed.
@@ -20,6 +21,12 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const form = await getPublicForm(id)
     if (!form) {
         return NextResponse.json({ error: "Form not found" }, { status: 404 })
+    }
+
+    // At most a few answers per visitor per form. The IP is only used as a hash for this counter.
+    const { ok } = await rateLimit(`answer:${await hashedIp()}:${id}`, RULES.answer)
+    if (!ok) {
+        return NextResponse.json({ error: "Too many answers, try again later" }, { status: 429 })
     }
 
     const body = await request.json().catch(() => null)
