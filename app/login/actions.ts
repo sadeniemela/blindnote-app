@@ -2,7 +2,7 @@
 
 import { signIn } from "@/auth"
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
+import { redirect, unstable_rethrow } from "next/navigation"
 import { RULES, hashedIp, rateLimit } from "@/lib/rate-limit"
 
 // Cookie that remembers which email the code was sent to, so the user
@@ -35,5 +35,15 @@ export async function requestCode(formData: FormData) {
 
   // Auth.js creates the code, saves its hash and sends the email,
   // then redirects to the verifyRequest page (/login/verify)
-  await signIn("resend", { email, redirectTo: "/dashboard" })
+  try {
+    await signIn("resend", { email, redirectTo: "/dashboard" })
+  } catch (error) {
+    // A successful signIn ends with a redirect, which Next.js does by throwing a
+    // special error. unstable_rethrow lets that one through untouched.
+    unstable_rethrow(error)
+    // Anything else (email service down, missing settings) is logged for us,
+    // and the user sees a clear message instead of a 500 error page.
+    console.error("[login] sending the code failed:", error)
+    redirect("/login/verify?error=SendFailed")
+  }
 }
