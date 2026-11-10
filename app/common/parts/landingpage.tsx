@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Demo from "./demo"
 import { getDictionary } from "@/lib/i18n"
+import { PUBLISHER, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site"
 
 // Small uppercase label in parentheses, used to name each section
 function Label({ children }: { children: React.ReactNode }) {
@@ -26,8 +27,43 @@ function Redacted({ children }: { children: React.ReactNode }) {
 }
 
 export default async function LandingPage() {
-  const { t } = await getDictionary()
+  const { locale, t } = await getDictionary()
   const l = t.landing
+
+  // Machine readable facts for search engines and AI assistants (schema.org JSON-LD).
+  // The same facts a person reads on the page, in a format a program can read.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${PUBLISHER.url}#organization`,
+        name: PUBLISHER.name,
+        url: PUBLISHER.url,
+        contactPoint: { "@type": "ContactPoint", contactType: "customer support", url: PUBLISHER.url },
+      },
+      {
+        "@type": "WebApplication",
+        name: SITE_NAME,
+        url: SITE_URL,
+        description: SITE_DESCRIPTION,
+        applicationCategory: "BusinessApplication",
+        operatingSystem: "Web",
+        inLanguage: ["fi", "en"],
+        offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+        publisher: { "@id": `${PUBLISHER.url}#organization` },
+      },
+      {
+        "@type": "FAQPage",
+        inLanguage: locale,
+        mainEntity: l.faq.map((item) => ({
+          "@type": "Question",
+          name: item.q,
+          acceptedAnswer: { "@type": "Answer", text: item.a },
+        })),
+      },
+    ],
+  }
 
   return (
     <main className="bg-white text-black dark:bg-black dark:text-white">
@@ -104,6 +140,23 @@ export default async function LandingPage() {
       {/* DEMO: try the real API without an account */}
       <Demo t={t.demo} />
 
+      {/* FAQ: answers the questions people ask before they try */}
+      <section className="px-4 sm:px-8 py-32">
+        <Label>{l.faqLabel}</Label>
+        <dl className="mt-8 border-t border-black dark:border-white">
+          {l.faq.map((item, i) => (
+            <div
+              key={item.q}
+              className="grid grid-cols-[3rem_1fr] sm:grid-cols-[8rem_1fr_1fr] gap-4 py-8 border-b border-black dark:border-white"
+            >
+              <span className="font-mono text-sm text-neutral-500">0{i + 1}</span>
+              <dt className="font-heading font-black uppercase text-2xl sm:text-3xl tracking-tight">{item.q}</dt>
+              <dd className="col-start-2 sm:col-start-3 text-neutral-500 max-w-md sm:pt-1">{item.a}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
       {/* FINAL CALL TO ACTION, inverted colors */}
       <section className="bg-black text-white dark:bg-white dark:text-black px-4 sm:px-8 py-32 flex flex-col items-start gap-10">
         <p className="text-xs font-medium uppercase tracking-widest opacity-60">( {l.startLabel} )</p>
@@ -118,10 +171,16 @@ export default async function LandingPage() {
         </Link>
       </section>
 
-      <footer className="px-4 sm:px-8 py-6 flex justify-between text-xs uppercase tracking-widest text-neutral-500">
+      <footer className="px-4 sm:px-8 py-6 flex flex-wrap justify-between gap-4 text-xs uppercase tracking-widest text-neutral-500">
         <span>Blindnote</span>
         <span>{l.footer}</span>
+        <a href={PUBLISHER.url} className="hover:opacity-60 transition-opacity">
+          {l.madeBy} {PUBLISHER.name}
+        </a>
       </footer>
+
+      {/* JSON.stringify output is safe here because it only contains our own texts */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     </main>
   )
 }

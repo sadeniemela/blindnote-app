@@ -4,6 +4,9 @@ import Link from "next/link"
 import Header from "../../common/header"
 import { Label, Page, Title, fieldLabelClass, inputClass, primaryButtonClass, textLinkClass } from "../../common/ui"
 import { getDictionary } from "@/lib/i18n"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = { title: "Login", robots: { index: false } }
 
 // Login step 2: the user types the code from the email
 export default async function VerifyPage({

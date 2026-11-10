@@ -3,6 +3,9 @@ import { requestCode } from "./actions"
 import Header from "../common/header"
 import { Label, Page, Title, fieldLabelClass, inputClass, primaryButtonClass } from "../common/ui"
 import { getDictionary } from "@/lib/i18n"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = { title: "Login", alternates: { canonical: "/login" } }
 
 // Login step 1: the user types their email and we send a 6 digit code
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {

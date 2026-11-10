@@ -24,6 +24,8 @@ const en = {
     somethingWrong: "Something went wrong, please try again",
   },
   landing: {
+    metaTitle: "Blindnote, anonymous feedback with one link",
+    metaDescription: "Anonymous feedback with one link. Ask open questions, star ratings or multiple choice and read honest answers. No accounts for people answering.",
     tagline: "One link. Real answers.",
     est: "Est. 2026",
     intro: "Anonymous feedback with the lowest possible barrier. People say more when nobody is watching.",
@@ -51,6 +53,15 @@ const en = {
     startTitle1: "Start from",
     startTitle2: "one link.",
     footer: "No names attached.",
+    madeBy: "Made by",
+    faqLabel: "Questions",
+    faq: [
+      { q: "Is Blindnote really anonymous?", a: "Yes. Answers are saved without a name, email address or account, and they are never linked to an IP address. The form owner only sees the text, stars and choices people gave." },
+      { q: "Do people need an account to answer?", a: "No. Anyone with the link can answer right away on their phone or computer. Only the person who creates forms logs in, with a 6 digit code sent by email." },
+      { q: "What kind of questions can I ask?", a: "Open text questions, star ratings from one to five and multiple choice questions. One form can have up to twenty questions, and you see the results question by question." },
+      { q: "Can I send answers from my own app?", a: "Yes. Blindnote has a public JSON API. One POST request sends an answer to a form, and the demo on this page shows the exact request and response." },
+      { q: "What is it good for?", a: "Team retrospectives, course and event feedback, employee surveys, customer feedback and any situation where people are more honest when their name is not attached." },
+    ],
   },
   demo: {
     label: "Try it",
@@ -180,6 +191,8 @@ const fi: Dictionary = {
     somethingWrong: "Jokin meni pieleen, yritä uudelleen",
   },
   landing: {
+    metaTitle: "Blindnote, nimetön palaute yhdellä linkillä",
+    metaDescription: "Nimetöntä palautetta yhdellä linkillä. Kysy avoimia kysymyksiä, tähtiarvioita tai monivalintoja ja lue rehelliset vastaukset. Vastaajat eivät tarvitse tiliä.",
     tagline: "Yksi linkki. Oikeat vastaukset.",
     est: "Vuodesta 2026",
     intro: "Nimetöntä palautetta mahdollisimman matalalla kynnyksellä. Ihmiset sanovat enemmän, kun kukaan ei katso.",
@@ -207,6 +220,15 @@ const fi: Dictionary = {
     startTitle1: "Aloita",
     startTitle2: "yhdestä linkistä.",
     footer: "Ei nimiä.",
+    madeBy: "Tekijä",
+    faqLabel: "Kysymyksiä",
+    faq: [
+      { q: "Onko Blindnote oikeasti nimetön?", a: "On. Vastaukset tallennetaan ilman nimeä, sähköpostiosoitetta tai tiliä, eikä niitä koskaan yhdistetä IP-osoitteeseen. Lomakkeen omistaja näkee vain annetut tekstit, tähdet ja valinnat." },
+      { q: "Tarvitseeko vastaaja tilin?", a: "Ei. Kuka tahansa linkin saanut voi vastata heti puhelimella tai tietokoneella. Vain lomakkeiden tekijä kirjautuu, sähköpostiin tulevalla 6 numeron koodilla." },
+      { q: "Millaisia kysymyksiä voin esittää?", a: "Avoimia tekstikysymyksiä, tähtiarvioita yhdestä viiteen ja monivalintoja. Yhdessä lomakkeessa voi olla jopa kaksikymmentä kysymystä, ja tulokset näet kysymys kerrallaan." },
+      { q: "Voinko lähettää vastauksia omasta sovelluksestani?", a: "Voit. Blindnotella on julkinen JSON-rajapinta. Yksi POST-pyyntö lähettää vastauksen lomakkeeseen, ja tämän sivun demo näyttää tarkan pyynnön ja vastauksen." },
+      { q: "Mihin sitä voi käyttää?", a: "Tiimin retroihin, kurssi- ja tapahtumapalautteeseen, henkilöstökyselyihin, asiakaspalautteeseen ja kaikkiin tilanteisiin, joissa ihmiset ovat rehellisempiä ilman nimeä." },
+    ],
   },
   demo: {
     label: "Kokeile",

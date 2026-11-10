@@ -6,6 +6,10 @@ import ThemeToggle from "../common/themetoggle"
 import { Page } from "../common/ui"
 import LanguageToggle from "../common/language-toggle"
 import { getDictionary } from "@/lib/i18n"
+import type { Metadata } from "next"
+
+// Private pages: tell search engines not to index them
+export const metadata: Metadata = { title: "Dashboard", robots: { index: false, follow: false } }
 
 // Shared layout for every page under /dashboard. Because the login check is here,
 // no dashboard page can be shown to someone who is not logged in.

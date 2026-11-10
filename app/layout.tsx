@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Providers from "./providers";
 import { getLocale } from "@/lib/i18n";
+import { PUBLISHER, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,8 +25,30 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Blindnote, anonymous feedback platform",
-  description: "Blindnote is an anonymous feedback platform that allows users to share their thoughts and opinions without revealing their identity. It provides a safe and secure environment for individuals to express themselves freely, fostering open communication and honest feedback.",
+  // Relative URLs below (canonical, images) are joined to this address
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Blindnote, anonymous feedback with one link",
+    // Other pages can set just their own name, for example "Login | Blindnote"
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [{ name: PUBLISHER.name, url: PUBLISHER.url }],
+  // The one official address of the front page, so search engines do not count duplicates
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    title: "Blindnote, anonymous feedback with one link",
+    description: SITE_DESCRIPTION,
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blindnote, anonymous feedback with one link",
+    description: SITE_DESCRIPTION,
+  },
 };
 
 export default async function RootLayout({

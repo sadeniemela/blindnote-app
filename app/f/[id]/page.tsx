@@ -6,6 +6,10 @@ import { notFound } from "next/navigation"
 import FeedbackForm from "./feedback-form"
 import LanguageToggle from "../../common/language-toggle"
 import { Label, Page, Title } from "../../common/ui"
+import type { Metadata } from "next"
+
+// Feedback forms are shared by link only, so they should not show up in search results
+export const metadata: Metadata = { title: "Anonymous feedback", robots: { index: false, follow: false } }
 
 // Public page that anyone with the link can open. No login is required.
 export default async function FeedbackPage({ params }: { params: Promise<{ id: string }> }) {
