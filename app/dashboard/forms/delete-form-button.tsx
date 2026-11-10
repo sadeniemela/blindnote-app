@@ -3,13 +3,23 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 
+type Labels = { delete: string; deleting: string; confirm: string }
+
 // redirectTo: where to go after deleting. Without it the current page is just refreshed.
-export default function DeleteFormButton({ formId, redirectTo }: { formId: string; redirectTo?: string }) {
+export default function DeleteFormButton({
+  formId,
+  labels,
+  redirectTo,
+}: {
+  formId: string
+  labels: Labels
+  redirectTo?: string
+}) {
   const router = useRouter()
   const [deleting, setDeleting] = useState(false)
 
   async function handleDelete() {
-    if (!confirm("Haluatko varmasti poistaa tämän lomakkeen? Myös kaikki sen vastaukset poistuvat.")) return
+    if (!confirm(labels.confirm)) return
 
     setDeleting(true)
     const res = await fetch(`/api/forms/${formId}`, { method: "DELETE" })
@@ -27,7 +37,7 @@ export default function DeleteFormButton({ formId, redirectTo }: { formId: strin
       disabled={deleting}
       className="text-xs font-medium uppercase tracking-widest text-neutral-500 hover:text-red-600 transition-colors disabled:opacity-50"
     >
-      {deleting ? "Poistetaan" : redirectTo ? "Poista lomake" : "Poista"}
+      {deleting ? labels.deleting : labels.delete}
     </button>
   )
 }

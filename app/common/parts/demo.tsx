@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Label, fieldLabelClass, inputClass, primaryButtonClass } from "../ui"
+import type { Dictionary } from "@/lib/i18n/dictionaries"
 
 const DEMO_PATH = "/api/forms/demo/responses"
 const MAX_LENGTH = 2000
@@ -11,7 +12,7 @@ type Sent = { content: string; status: number; body: unknown }
 // Interactive demo: the visitor answers the demo form through the real public API.
 // On the right we show exactly what was sent and what the API answered, so the
 // demo doubles as API documentation.
-export default function Demo() {
+export default function Demo({ t }: { t: Dictionary["demo"] }) {
   const [content, setContent] = useState("")
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState<Sent[]>([])
@@ -37,36 +38,36 @@ export default function Demo() {
 
   return (
     <section id="demo" className="px-4 sm:px-8 py-32 border-t border-black dark:border-white scroll-mt-8">
-      <Label>Try it</Label>
+      <Label>{t.label}</Label>
       <h2 className="mt-8 font-heading font-black uppercase text-5xl sm:text-8xl leading-[0.85] tracking-tighter [word-spacing:0.15em]">
-        Be the<br />anonymous one.
+        {t.title1}<br />{t.title2}
       </h2>
       <p className="mt-8 text-lg text-neutral-500 max-w-xl">
-        This is a real Blindnote form. Write an answer and see what the owner of the form receives, and what happens under the hood.
+        {t.intro}
       </p>
 
       <div className="mt-16 grid lg:grid-cols-2 gap-16">
         {/* LEFT: what the person answering sees */}
         <div>
-          <Label>01 / The person answering</Label>
+          <Label>{t.answeringLabel}</Label>
           <p className="mt-6 font-heading font-black uppercase text-3xl sm:text-4xl tracking-tight">
-            What should we do better?
+            {t.question}
           </p>
           <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-8">
             <label className="flex flex-col gap-2">
-              <span className={fieldLabelClass}>Your answer</span>
+              <span className={fieldLabelClass}>{t.answerLabel}</span>
               <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 required
                 rows={3}
                 maxLength={MAX_LENGTH}
-                placeholder="Be honest, nobody knows it was you"
+                placeholder={t.placeholder}
                 className={inputClass + " !text-xl resize-none"}
               />
             </label>
             <button type="submit" disabled={sending || !content.trim()} className={primaryButtonClass + " self-start"}>
-              {sending ? "Sending" : "Send anonymously"}
+              {sending ? t.sending : t.send}
             </button>
           </form>
         </div>
@@ -74,10 +75,10 @@ export default function Demo() {
         {/* RIGHT: what the owner sees, and the raw API call */}
         <div className="flex flex-col gap-12">
           <div>
-            <Label>02 / The form owner sees</Label>
+            <Label>{t.ownerLabel}</Label>
             {sent.filter((s) => s.status === 201).length === 0 ? (
               <p className="mt-6 text-neutral-500 border-t border-black dark:border-white pt-6">
-                Nothing yet. Send an answer and it appears here, without a name.
+                {t.empty}
               </p>
             ) : (
               <ol className="mt-6 border-t border-black dark:border-white">
@@ -86,7 +87,7 @@ export default function Demo() {
                   .map((s, i) => (
                     <li key={i} className="py-5 border-b border-black dark:border-white flex justify-between gap-6">
                       <p className="text-lg break-words min-w-0">{s.content}</p>
-                      <span className="font-mono text-xs text-neutral-500 shrink-0 pt-1">anonymous</span>
+                      <span className="font-mono text-xs text-neutral-500 shrink-0 pt-1">{t.anonymousTag}</span>
                     </li>
                   ))}
               </ol>
@@ -94,17 +95,17 @@ export default function Demo() {
           </div>
 
           <div>
-            <Label>03 / Under the hood</Label>
+            <Label>{t.hoodLabel}</Label>
             <pre className="mt-6 bg-black text-white dark:bg-white dark:text-black p-6 font-mono text-xs leading-relaxed overflow-x-auto whitespace-pre-wrap break-words">
 {`POST ${DEMO_PATH}
 Content-Type: application/json
 
-${JSON.stringify({ content: last?.content ?? "your answer" }, null, 2)}
+${JSON.stringify({ content: last?.content ?? t.yourAnswer }, null, 2)}
 
-${last ? `HTTP ${last.status}\n${JSON.stringify(last.body, null, 2)}` : "Waiting for your answer..."}`}
+${last ? `HTTP ${last.status}\n${JSON.stringify(last.body, null, 2)}` : t.waiting}`}
             </pre>
             <p className="mt-4 text-sm text-neutral-500">
-              No login, no cookies, no IP stored. Any app can send feedback to a Blindnote form with one request.
+              {t.hoodNote}
             </p>
           </div>
         </div>

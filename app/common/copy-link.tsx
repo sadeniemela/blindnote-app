@@ -4,7 +4,15 @@ import { useState } from "react"
 import { textLinkClass } from "./ui"
 
 // Copies the public feedback link to the clipboard and shows a short confirmation
-export default function CopyLink({ path, className = textLinkClass }: { path: string; className?: string }) {
+export default function CopyLink({
+  path,
+  labels,
+  className = textLinkClass,
+}: {
+  path: string
+  labels: { copy: string; copied: string }
+  className?: string
+}) {
   const [copied, setCopied] = useState(false)
 
   async function copy() {
@@ -15,7 +23,7 @@ export default function CopyLink({ path, className = textLinkClass }: { path: st
 
   return (
     <button type="button" onClick={copy} className={className}>
-      {copied ? "Kopioitu" : "Kopioi linkki"}
+      {copied ? labels.copied : labels.copy}
     </button>
   )
 }

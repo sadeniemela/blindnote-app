@@ -31,16 +31,48 @@ model Form {
   description String?
   userId      String
   user        User       @relation(fields: [userId], references: [id])
+  questions   Question[]
   responses   Response[]
   createdAt   DateTime   @default(now())
 }
 
+// One question in a form. type is "text", "rating" (1 to 5 stars) or "choice".
+model Question {
+  id       String   @id @default(cuid())
+  formId   String
+  form     Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  type     String
+  label    String
+  // Only used by "choice" questions
+  options  String[]
+  // Order of the question in the form, starting from 0
+  position Int
+  answers  Answer[]
+
+  @@index([formId])
+}
+
 model Response {
   id        String   @id @default(cuid())
-  content   String
+  // Used by older forms that only had one open question. New forms store Answers instead.
+  content   String?
   formId    String
   form      Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  answers   Answer[]
   createdAt DateTime @default(now())
+}
+
+// The answer to one question inside one response. Ratings are stored as "1" to "5".
+model Answer {
+  id         String   @id @default(cuid())
+  responseId String
+  response   Response @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  value      String
+
+  @@index([responseId])
+  @@index([questionId])
 }
 
 model Account {

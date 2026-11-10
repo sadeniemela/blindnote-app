@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Archivo } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Providers from "./providers";
+import { getLocale } from "@/lib/i18n";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,14 +28,14 @@ export const metadata: Metadata = {
   description: "Blindnote is an anonymous feedback platform that allows users to share their thoughts and opinions without revealing their identity. It provides a safe and secure environment for individuals to express themselves freely, fostering open communication and honest feedback.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html
-      lang="en"
+      lang={await getLocale()}
       className={`${geistSans.variable} ${geistMono.variable} ${archivo.variable} h-full antialiased overflow-x-hidden`}
       suppressHydrationWarning
     >

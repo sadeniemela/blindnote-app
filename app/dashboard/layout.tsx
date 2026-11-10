@@ -4,6 +4,8 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import ThemeToggle from "../common/themetoggle"
 import { Page } from "../common/ui"
+import LanguageToggle from "../common/language-toggle"
+import { getDictionary } from "@/lib/i18n"
 
 // Shared layout for every page under /dashboard. Because the login check is here,
 // no dashboard page can be shown to someone who is not logged in.
@@ -14,6 +16,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
     redirect("/login")
   }
 
+  const { locale, t } = await getDictionary()
+
   return (
     <Page>
       <header className="py-5 flex items-center justify-between gap-4 text-xs font-medium uppercase tracking-widest border-b border-black dark:border-white">
@@ -23,9 +27,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
         <span className="hidden md:block text-neutral-500 normal-case tracking-normal">{session.user.email}</span>
 
-        <nav className="flex items-center gap-6">
+        <nav className="flex items-center gap-5 sm:gap-6">
           <Link href="/dashboard/forms" className="hover:opacity-60 transition-opacity">
-            Lomakkeet
+            {t.common.forms}
           </Link>
           <form
             action={async () => {
@@ -34,10 +38,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
             }}
           >
             <button type="submit" className="uppercase tracking-widest hover:opacity-60 transition-opacity">
-              Ulos
+              {t.common.logout}
             </button>
           </form>
-          <ThemeToggle />
+          <LanguageToggle locale={locale} label={t.common.language} />
+          <ThemeToggle labels={{ dark: t.common.dark, light: t.common.light, toggle: t.common.toggleTheme }} />
         </nav>
       </header>
 

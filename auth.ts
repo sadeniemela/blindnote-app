@@ -7,9 +7,19 @@ import { prisma } from "@/lib/db"
 
 const CODE_MAX_AGE_SECONDS = 10 * 60
 
+// The Prisma adapter throws if it tries to delete a session that is already gone,
+// for example when the browser still has an old cookie. That made a correct login
+// code fail. deleteMany simply deletes zero rows in that case, so login continues.
+const adapter = {
+  ...PrismaAdapter(prisma),
+  deleteSession: async (sessionToken: string) => {
+    await prisma.session.deleteMany({ where: { sessionToken } })
+  },
+}
+
 // Configure NextAuth with providers and Prisma adapter
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma),
+  adapter,
   providers: [
     // Resend provider for email authentication with a one time code
     Resend({

@@ -3,11 +3,7 @@ import { cookies } from "next/headers"
 import Link from "next/link"
 import Header from "../../common/header"
 import { Label, Page, Title, fieldLabelClass, inputClass, primaryButtonClass, textLinkClass } from "../../common/ui"
-
-// Messages for the error codes we may get in the URL
-const ERRORS: Record<string, string> = {
-  Verification: "The code is wrong or expired. Check the code or request a new one.",
-}
+import { getDictionary } from "@/lib/i18n"
 
 // Login step 2: the user types the code from the email
 export default async function VerifyPage({
@@ -16,8 +12,10 @@ export default async function VerifyPage({
   searchParams: Promise<{ error?: string }>
 }) {
   const { error } = await searchParams
+  const { t: { login: t } } = await getDictionary()
   const email = (await cookies()).get("blindnote_login_email")?.value
-  const message = error ? ERRORS[error] ?? "We could not send the code. Please try again." : null
+  // Auth.js sends ?error=Verification for a wrong or expired code, other errors mean sending failed
+  const message = error ? (error === "Verification" ? t.wrongCode : t.sendFailed) : null
   // Show the code form only when a code was sent: no error yet, or the typed code was wrong
   const showForm = email && (!error || error === "Verification")
 
@@ -26,15 +24,15 @@ export default async function VerifyPage({
       <Header />
 
       <div className="flex-1 flex flex-col justify-center max-w-2xl w-full pt-28 pb-12">
-        <Label>Login / Step 2</Label>
+        <Label>{t.verifyLabel}</Label>
         <Title className="mt-6 mb-8">
-          {showForm ? <>Check your<br />email.</> : <>Something<br />went wrong.</>}
+          {showForm ? <>{t.checkTitle1}<br />{t.checkTitle2}</> : <>{t.errorTitle1}<br />{t.errorTitle2}</>}
         </Title>
 
         {showForm ? (
           <>
             <p className="text-lg text-neutral-500 mb-12 max-w-md">
-              We sent a 6 digit code to <span className="text-black dark:text-white">{email}</span>. It is valid for 10 minutes.
+              {t.sentTo} <span className="text-black dark:text-white">{email}</span>. {t.validFor}
             </p>
 
             {/* A plain GET form that goes straight to the Auth.js callback, the same URL
@@ -44,7 +42,7 @@ export default async function VerifyPage({
               <input type="hidden" name="email" value={email} />
               <input type="hidden" name="callbackUrl" value="/dashboard" />
               <label className="flex flex-col gap-2">
-                <span className={fieldLabelClass}>Code</span>
+                <span className={fieldLabelClass}>{t.code}</span>
                 <input
                   name="token"
                   inputMode="numeric"
@@ -60,10 +58,10 @@ export default async function VerifyPage({
               {message && <p className="text-sm text-red-600 dark:text-red-400">{message}</p>}
               <div className="flex items-center gap-8">
                 <button type="submit" className={primaryButtonClass}>
-                  Sign in
+                  {t.signIn}
                 </button>
                 <Link href="/login" className={textLinkClass}>
-                  Request a new code
+                  {t.newCode}
                 </Link>
               </div>
             </form>
@@ -72,7 +70,7 @@ export default async function VerifyPage({
           <>
             {message && <p className="text-lg text-neutral-500 mb-10">{message}</p>}
             <Link href="/login" className={primaryButtonClass + " self-start"}>
-              Back to login
+              {t.backToLogin}
             </Link>
           </>
         )}

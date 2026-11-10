@@ -1,12 +1,14 @@
 
 import { createResponse, getPublicForm } from "@/lib/forms"
 import { DEMO_FORM_ID, ensureDemoForm } from "@/lib/demo"
+import { LIMITS, parseAnswers } from "@/lib/questions"
 import { NextResponse } from "next/server"
-
-const MAX_LENGTH = 2000
 
 // Public API route: anyone with the link can send anonymous feedback, no login needed.
 // That is why we validate everything carefully and return only what the sender needs.
+//
+// Body for forms with questions:  { "answers": [{ "questionId": "...", "value": "4" }] }
+// Body for older one question forms: { "content": "text" }
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
 
@@ -21,16 +23,28 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     }
 
     const body = await request.json().catch(() => null)
+
+    // Form with questions: check every answer against its question type
+    if (form.questions.length > 0) {
+        const parsed = parseAnswers(form.questions, body?.answers)
+        if (!parsed.ok) {
+            return NextResponse.json({ error: parsed.error }, { status: 400 })
+        }
+        const response = await createResponse(id, { answers: parsed.data })
+        return NextResponse.json(response, { status: 201 })
+    }
+
+    // Older form with a single open question
     const content = typeof body?.content === "string" ? body.content.trim() : ""
 
     if (!content) {
         return NextResponse.json({ error: "Content is required" }, { status: 400 })
     }
 
-    if (content.length > MAX_LENGTH) {
-        return NextResponse.json({ error: `Content max ${MAX_LENGTH} characters` }, { status: 400 })
+    if (content.length > LIMITS.text) {
+        return NextResponse.json({ error: `Content max ${LIMITS.text} characters` }, { status: 400 })
     }
 
-    const response = await createResponse(id, content)
+    const response = await createResponse(id, { content })
     return NextResponse.json(response, { status: 201 })
 }
