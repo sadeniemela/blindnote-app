@@ -6,6 +6,7 @@ import Link from "next/link"
 import DeleteFormButton from "./delete-form-button"
 import CopyLink from "../../common/copy-link"
 import PushToggle from "../push-toggle"
+import InstallApp from "../install-app"
 import { Label, Title, primaryButtonClass, textLinkClass } from "../../common/ui"
 
 export default async function FormsPage() {
@@ -25,6 +26,9 @@ export default async function FormsPage() {
           {t.forms.newForm}
         </Link>
       </div>
+
+      {/* Hidden when Blindnote is already opened from the home screen */}
+      <InstallApp t={t.install} />
 
       {/* Only shown when the VAPID keys are set, see README */}
       {process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && (
