@@ -44,6 +44,9 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     url: "/",
   },
+  // Icon and name when the site is added to the iPhone home screen
+  icons: { apple: "/pwa-icon/180" },
+  appleWebApp: { capable: true, title: SITE_NAME, statusBarStyle: "default" },
   twitter: {
     card: "summary_large_image",
     title: "Blindnote, anonymous feedback with one link",

@@ -14,15 +14,16 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  name          String?
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  forms         Form[]
-  createdAt     DateTime  @default(now())
+  id                String             @id @default(cuid())
+  email             String             @unique
+  name              String?
+  emailVerified     DateTime?
+  image             String?
+  accounts          Account[]
+  sessions          Session[]
+  forms             Form[]
+  pushSubscriptions PushSubscription[]
+  createdAt         DateTime           @default(now())
 }
 
 model Form {
@@ -108,10 +109,28 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
 // Counters for rate limiting. key is for example "verify:email@example.com" or
 // "answer:<hashed ip>:<formId>". Rows are reset when their time window has passed.
 model RateLimit {
   key         String   @id
   count       Int
   windowStart DateTime
+}
+
+// One device (phone, browser) that wants a notification when the user's forms get answers.
+// endpoint is the push service address the browser gave us. p256dh and auth are the
+// keys used to encrypt the message so only that device can read it.
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  // Language of the notification texts, taken from the user's choice when subscribing
+  locale    String   @default("fi")
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }

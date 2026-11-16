@@ -20,6 +20,11 @@ Built with Next.js (App Router), Auth.js (email login code via Resend), Prisma a
    | `DIRECT_URL` | Direct Postgres connection, used for migrations |
    | `AUTH_SECRET` | Random secret for Auth.js. Create one with `npx auth secret` |
    | `AUTH_RESEND_KEY` | Resend API key for sending login codes |
+   | `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | Public key for push notifications |
+   | `VAPID_PRIVATE_KEY` | Private key for push notifications |
+   | `VAPID_SUBJECT` | Contact for push services, for example `https://blindnote.app` |
+
+   Create the push keys with `npx web-push generate-vapid-keys`. Without them the notification button is hidden.
 
 3. Apply the database migrations:
 
@@ -34,6 +39,12 @@ Built with Next.js (App Router), Auth.js (email login code via Resend), Prisma a
    ```
 
 Resend in test mode only delivers email to the address of the Resend account owner. To let anyone log in, verify your own domain in Resend and change the `from` address in `auth.ts`.
+
+## Push notifications
+
+Form owners can turn on notifications on the forms page. Every new answer then sends a notification to each device they turned it on, with the form name and the answer count but never the answer itself.
+
+Blindnote is a Progressive Web App (`app/manifest.ts`, `public/sw.js`). On iPhone and iPad, web push works from iOS 16.4 onwards and only after the site is added to the home screen: Share, Add to Home Screen, then open Blindnote from the home screen and turn notifications on there. Android, desktop Chrome, Firefox, Edge and Safari on Mac work straight from the browser.
 
 ## Deploying to Vercel
 

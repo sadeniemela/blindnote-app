@@ -3,7 +3,8 @@ import { createResponse, getPublicForm } from "@/lib/forms"
 import { DEMO_FORM_ID, ensureDemoForm } from "@/lib/demo"
 import { LIMITS, parseAnswers } from "@/lib/questions"
 import { RULES, hashedIp, rateLimit } from "@/lib/rate-limit"
-import { NextResponse } from "next/server"
+import { after, NextResponse } from "next/server"
+import { notifyNewAnswer } from "@/lib/push"
 
 // Public API route: anyone with the link can send anonymous feedback, no login needed.
 // That is why we validate everything carefully and return only what the sender needs.
@@ -38,6 +39,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
             return NextResponse.json({ error: parsed.error }, { status: 400 })
         }
         const response = await createResponse(id, { answers: parsed.data })
+        // Send the notification after the answer has been returned, so the person answering never waits for it
+        after(() => notifyNewAnswer(id))
         return NextResponse.json(response, { status: 201 })
     }
 
@@ -53,5 +56,6 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     }
 
     const response = await createResponse(id, { content })
+    after(() => notifyNewAnswer(id))
     return NextResponse.json(response, { status: 201 })
 }

@@ -5,6 +5,7 @@ import { getDictionary } from "@/lib/i18n"
 import Link from "next/link"
 import DeleteFormButton from "./delete-form-button"
 import CopyLink from "../../common/copy-link"
+import PushToggle from "../push-toggle"
 import { Label, Title, primaryButtonClass, textLinkClass } from "../../common/ui"
 
 export default async function FormsPage() {
@@ -24,6 +25,11 @@ export default async function FormsPage() {
           {t.forms.newForm}
         </Link>
       </div>
+
+      {/* Only shown when the VAPID keys are set, see README */}
+      {process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && (
+        <PushToggle publicKey={process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY} t={t.push} />
+      )}
 
       {forms.length === 0 ? (
         <div className="border-t border-black dark:border-white py-24">

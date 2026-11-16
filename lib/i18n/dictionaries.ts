@@ -165,6 +165,24 @@ const en = {
     error: "Sending failed, please try again",
     tooMany: "You have sent many answers already. Try again later.",
   },
+  push: {
+    label: "Notifications",
+    on: "Notifications on",
+    off: "Notify me",
+    turningOn: "Turning on",
+    enabledText: "This device gets a notification when your forms get new answers.",
+    disabledText: "Get a notification on this device when someone answers your forms.",
+    unsupported: "This browser does not support notifications.",
+    iosInstall: "On iPhone: tap Share and then Add to Home Screen. Open Blindnote from the home screen and turn notifications on there.",
+    denied: "Notifications are blocked. Allow them for Blindnote in your phone or browser settings.",
+    failed: "Turning on notifications failed, please try again.",
+  },
+  // Texts inside the notification itself. Kept apart from "push" because they contain
+  // functions, and functions can not be passed to Client Components.
+  pushMessage: {
+    newAnswer: "New answer",
+    answers: (n: number): string => (n === 1 ? "The form now has 1 answer." : `The form now has ${n} answers.`),
+  },
 }
 
 export type Dictionary = typeof en
@@ -331,6 +349,22 @@ const fi: Dictionary = {
     stars: "tähteä",
     error: "Lähetys epäonnistui, yritä uudelleen",
     tooMany: "Olet jo lähettänyt monta vastausta. Yritä myöhemmin uudelleen.",
+  },
+  push: {
+    label: "Ilmoitukset",
+    on: "Ilmoitukset päällä",
+    off: "Ilmoita minulle",
+    turningOn: "Kytketään",
+    enabledText: "Tämä laite saa ilmoituksen, kun lomakkeisiisi tulee uusia vastauksia.",
+    disabledText: "Saat tähän laitteeseen ilmoituksen, kun joku vastaa lomakkeisiisi.",
+    unsupported: "Tämä selain ei tue ilmoituksia.",
+    iosInstall: "iPhonessa: napauta Jaa ja sitten Lisää Koti-valikkoon. Avaa Blindnote kotivalikosta ja kytke ilmoitukset päälle siellä.",
+    denied: "Ilmoitukset on estetty. Salli ne Blindnotelle puhelimen tai selaimen asetuksista.",
+    failed: "Ilmoitusten kytkeminen epäonnistui, yritä uudelleen.",
+  },
+  pushMessage: {
+    newAnswer: "Uusi vastaus",
+    answers: (n: number) => (n === 1 ? "Lomakkeessa on nyt 1 vastaus." : `Lomakkeessa on nyt ${n} vastausta.`),
   },
 }
 
