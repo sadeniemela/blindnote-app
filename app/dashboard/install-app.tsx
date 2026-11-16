@@ -21,10 +21,14 @@ function ShareIcon() {
 // iPhone has no such dialog for websites, Apple only allows installing through Safari's
 // own Share menu, so there the button opens short step by step instructions.
 // What kind of device this is. Read from the browser, so the server render says "server".
-function detectDevice(): "standalone" | "ios" | "other" {
+function detectDevice(): "standalone" | "ios" | "mac-safari" | "other" {
   if (window.matchMedia("(display-mode: standalone)").matches) return "standalone"
-  const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
-  return isIos ? "ios" : "other"
+  const ua = navigator.userAgent
+  const isIos = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+  if (isIos) return "ios"
+  // Safari on Mac: "Safari" in the user agent but not Chrome, Edge or Firefox
+  if (/Macintosh/.test(ua) && /Safari/.test(ua) && !/Chrome|Chromium|Edg|Firefox/.test(ua)) return "mac-safari"
+  return "other"
 }
 const noSubscribe = () => () => {}
 
@@ -49,12 +53,12 @@ export default function InstallApp({ t }: { t: Dictionary["install"] }) {
     }
   }, [])
 
-  // ios: show the steps. prompt: the browser offered to install. hidden: nothing to show.
+  // prompt: the browser offered to install, we can do it with one tap.
+  // Otherwise we show instructions that fit the device. Hidden only when already installed.
   const mode = installed || device === "standalone" || device === "server"
     ? "hidden"
-    : device === "ios" ? "ios"
     : promptEvent ? "prompt"
-    : "hidden"
+    : device
 
   async function install() {
     if (!promptEvent) return
@@ -87,6 +91,9 @@ export default function InstallApp({ t }: { t: Dictionary["install"] }) {
           </button>
         )}
       </div>
+
+      {mode === "mac-safari" && showSteps && <p className="mt-6 pt-6 border-t border-black dark:border-white text-lg">{t.macSafari}</p>}
+      {mode === "other" && showSteps && <p className="mt-6 pt-6 border-t border-black dark:border-white text-lg">{t.otherBrowser}</p>}
 
       {mode === "ios" && showSteps && (
         <ol className="mt-6 border-t border-black dark:border-white">

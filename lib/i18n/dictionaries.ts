@@ -185,6 +185,8 @@ const en = {
     iosStep1: "Tap the Share button in Safari's toolbar",
     iosStep2: "Choose Add to Home Screen",
     iosStep3: "Open Blindnote from your home screen",
+    macSafari: "In Safari on Mac choose File, then Add to Dock.",
+    otherBrowser: "Open your browser's menu and choose Install app or Add to Home Screen. In Chrome the install icon is also at the right end of the address bar.",
     close: "Close",
   },
   // Texts inside the notification itself. Kept apart from "push" because they contain
@@ -380,6 +382,8 @@ const fi: Dictionary = {
     iosStep1: "Napauta Safarin työkalupalkin Jaa-painiketta",
     iosStep2: "Valitse Lisää Koti-valikkoon",
     iosStep3: "Avaa Blindnote kotivalikosta",
+    macSafari: "Macin Safarissa valitse Arkisto ja sitten Lisää Dockiin.",
+    otherBrowser: "Avaa selaimen valikko ja valitse Asenna sovellus tai Lisää Koti-valikkoon. Chromessa asennuskuvake on myös osoitepalkin oikeassa reunassa.",
     close: "Sulje",
   },
   pushMessage: {
